@@ -7,12 +7,17 @@ using (var db = new MyContext())
     db.Database.EnsureDeleted();
     db.Database.EnsureCreated();
 
-    var vehicle = new Vehicle { Registration = new() };
-    db.Vehicles.Add(vehicle);
+    db.Vehicles.Add(new Vehicle { Registration = new() });
+    db.Vehicles.Add(new Vehicle { Registration = new() { Approved = false } });
+    db.Vehicles.Add(new Vehicle { Registration = new() { Approved = true } });
     await db.SaveChangesAsync();
 }
 
 Test(db => db.Vehicles.Where(p => !p.Registration.Approved ?? true));
+Console.WriteLine();
+Console.WriteLine("==========================================================");
+Console.WriteLine();
+Test(db => db.Vehicles.Where(p => !(p.Registration.Approved ?? false)));
 Console.WriteLine();
 Console.WriteLine("==========================================================");
 Console.WriteLine();
@@ -28,5 +33,5 @@ static void Test(Func<MyContext, IQueryable<Vehicle>> f, [CallerArgumentExpressi
     var r = q.ToArray();
     Console.WriteLine(s);
     Console.WriteLine("-----------------------");
-    Console.WriteLine($"Expected 1, got {r.Length}");
+    Console.WriteLine($"Expected 2, got {r.Length}");
 }
