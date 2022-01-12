@@ -14,13 +14,7 @@ using (var db = new MyContext())
 }
 
 Test(db => db.Vehicles.Where(p => !p.Registration.Approved ?? true));
-Console.WriteLine();
-Console.WriteLine("==========================================================");
-Console.WriteLine();
 Test(db => db.Vehicles.Where(p => !(p.Registration.Approved ?? false)));
-Console.WriteLine();
-Console.WriteLine("==========================================================");
-Console.WriteLine();
 Test(db => db.Vehicles.Where(p => p.Registration.Approved == null || !p.Registration.Approved.Value));
 
 static void Test(Func<MyContext, IQueryable<Vehicle>> f, [CallerArgumentExpression("f")] string expression = "")
@@ -34,4 +28,6 @@ static void Test(Func<MyContext, IQueryable<Vehicle>> f, [CallerArgumentExpressi
     Console.WriteLine(s);
     Console.WriteLine("-----------------------");
     Console.WriteLine($"Expected 2, got {r.Length}");
+    Console.WriteLine("-----------------------");
+    Console.WriteLine();
 }
